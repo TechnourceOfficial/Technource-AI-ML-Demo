@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>AI ML Demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Please insert users data for get predicted data</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter Name" value="John">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="age">Age:</label>
+                            <input type="text" class="form-control" id="age" placeholder="Enter Age" value="33">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="gender">Gender:</label>
+                            <select class="form-control" id="gender">
+                                <option value="1">Male</option>
+                                <option value="2">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="height">Height (cm):</label>
+                            <input type="text" class="form-control" id="height" placeholder="Enter Height" value="192">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="weight">Weight (kg):</label>
+                            <input type="text" class="form-control" id="weight" placeholder="Enter Weight" value="95">
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label for="openai_key">OpenAI API Key (For Get Users AI Diet Plan):</label>
+                            <input type="text" class="form-control" id="openai_key" placeholder="Enter OpenAI Key" value="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">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-default" onclick="getPrediction()">Get Prediction</button>
+    </div>
+    <div class="container">
+        <h2>Predicted Data</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Favourite Music Category</th>
+                            <th>Will Buy Insurance?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th id="favouriteMusic"></th>
+                            <th id="willBuyInsurance"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h2>AI Diet Plan</h2>
+        <div class="row">
+            <div class="col-md-12" id="aiDietPlan"></div>
+        </div>
+    </div>
+</body>
+<script>
+    function getPrediction() {
+
+        $("#favouriteMusic").html("Loading...");
+        $("#willBuyInsurance").html("Loading...");
+        $("#aiDietPlan").html("Loading...");
+
+        let name = $("#name").val();
+        let age = $("#age").val();
+        let gender = $("#gender").val();
+        let height = $("#height").val();
+        let weight = $("#weight").val();
+        let openai_key = $("#openai_key").val();
+        let requestData = {
+            name: name,
+            age: age,
+            gender: gender,
+            height: height,
+            weight: weight,
+            openai_key:openai_key
+        }
+        requestData = JSON.stringify(requestData);
+        $.ajax({
+            url: "get-predictions",
+            contentType: "application/json",
+            data : requestData,
+            method:"POST",
+            success: function(result){
+                result = JSON.parse(result);
+                $("#favouriteMusic").html(result?.data?.predicted_music);
+                $("#willBuyInsurance").html(result?.data?.predicted_insurance == 1 ? "Yes" : "No");
+                $("#aiDietPlan").html(result?.data?.ai_diet_plan);
+            }
+        });
+    }
+</script>
+</html>
