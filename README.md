@@ -59,3 +59,6 @@ Prepare trained Music & Insurance model
 ### `python -m flask run`
 Runs the app in the development mode.\
 Open [http://localhost:5000](http://localhost:5000) to view it in your browser
+
+### Demo Screenshot
+![AI-ML-Demo](https://github.com/TechnourceOfficial/Technource-AI-ML-Demo/assets/70566076/41a8741c-82fd-4748-8cb6-3459a3944e5e)
